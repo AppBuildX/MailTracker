@@ -58,21 +58,34 @@ const AppPasswordsInstructions = props => {
             To create an app password for Gmail, follow these steps:
           </p>
           <ol className="text-sm list-decimal pl-6 mt-2">
-            <li>Go to your Google Account settings.</li>
-            <li>Click on the &#34;Security&#34; tab.</li>
             <li>
-              Under the &#34;Signing in to Google&#34; section, click on
-              &#34;App Passwords&#34;.
+              Open your Google Account settings page:{" "}
+              <a href="https://myaccount.google.com/">
+                https://myaccount.google.com/
+              </a>.
             </li>
-            <li>Enter your Google account password if prompted.</li>
+            <li>Sign in to your Gmail account if you haven&#39;t already.</li>
             <li>
-              Select the app and device where you want to use the app password.
+              In the &#34;.Security&#34;. section, click on the &#34;.App
+              Passwords&#34;. option. You may need to verify your identity by
+              entering your password again.
             </li>
-            <li>Follow the instructions to generate the app password.</li>
             <li>
-              Use the generated app password when prompted to sign in to your
-              Gmail account on the selected app or device.
+              If you have 2-Step Verification enabled, you&#39;ll need to enter
+              the verification code sent to your device.
             </li>
+            <li>
+              Scroll down to the &#34;.Select app&#34;. dropdown and choose
+              &#34;.Mail&#34;. or &#34;.Other (Custom name)&#34;.if Mail is not
+              available.
+            </li>
+            <li>Select your device or app from the second dropdown menu.</li>
+            <li>Click on the &#34;.Generate&#34;. button.</li>
+            <li>
+              Google will generate a unique app password for the selected
+              app/device.
+            </li>
+            <li>Copy the generated app password and use it in this website.</li>
           </ol>
           <form onSubmit={handleSubmit} className="mt-4">
             <label htmlFor="appPassword" className="block mb-2 text-sm">
@@ -81,6 +94,7 @@ const AppPasswordsInstructions = props => {
             <input
               type="password"
               id="appPassword"
+              placeholder="generated app password"
               value={appPassword}
               onChange={handleInputChange}
               className="w-full px-2 py-1 border border-gray-300 rounded"

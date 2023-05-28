@@ -1,10 +1,11 @@
 "use client";
-import React, { useState, memo } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import { useState, memo, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import axios from "@/lib/axiosInstance";
 import swal from "sweetalert";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from "uuid";
 
 const FloatingActionButton = props => {
@@ -16,6 +17,18 @@ const FloatingActionButton = props => {
     subject: "",
     message: ""
   });
+
+  useEffect(
+    () => {
+      setIsFormOpen(false);
+      setFormData({
+        to: "",
+        subject: "",
+        message: ""
+      });
+    },
+    [props.refreshKey]
+  );
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -30,7 +43,8 @@ const FloatingActionButton = props => {
           .user.email}/${uniqueId}`;
         const trackingMessage =
           message +
-          `<img src=${apiUrl} width="1" height="1" style="display: none;">`;
+          `<img src="${apiUrl}" width="1" height="1" style="display: none;">`;
+
         const sendMail = await axios.post("/send-email", {
           _id: uniqueId,
           sender: session.user.email,
@@ -38,21 +52,16 @@ const FloatingActionButton = props => {
           subject: subject,
           content: trackingMessage
         });
+
         const { error, sent } = sendMail.data;
         if (sent) {
           props.onRefresh();
           setIsLoading(false);
-          setFormData({
-            to: "",
-            subject: "",
-            message: ""
-          });
           setIsFormOpen(false);
           swal("Successfully Sent", {
             icon: "success"
           });
-        }
-        if (error) {
+        } else {
           setIsLoading(false);
           setIsFormOpen(false);
           if (
@@ -70,7 +79,7 @@ const FloatingActionButton = props => {
         swal("Error", error.message, "error");
       }
     } else {
-      swal("Error", "Please filled all fields", "error");
+      swal("Error", "Please fill in all fields", "error");
     }
   };
 
@@ -151,20 +160,20 @@ const FloatingActionButton = props => {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path fill="#fff" fill-opacity=".01" d="M0 0h48v48H0z" />
+                    <path fill="#fff" fillOpacity=".01" d="M0 0h48v48H0z" />
                     <path
                       d="M4 24c0 11.046 8.954 20 20 20v0c11.046 0 20-8.954 20-20S35.046 4 24 4"
                       stroke="#000"
-                      stroke-width="4"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M36 24c0-6.627-5.373-12-12-12s-12 5.373-12 12 5.373 12 12 12v0"
                       stroke="#000"
-                      stroke-width="4"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 : "Submit"}
